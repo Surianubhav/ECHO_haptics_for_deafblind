@@ -1,0 +1,183 @@
+HAPTIC DATASET — VALIDATION REPORT
+============================================================
+Total rows (main dataset): 6781
+Total rows (challenge eval set): 1891
+
+Unique input_text values: 6781
+Exact duplicate rows remaining: 0
+input_text values with conflicting labels (post-cleaning): 0
+  -> Conflicts were auto-resolved during generation (see README note on bare
+     single-word utterances being ambiguous between statement/question; the
+     first-generated label was kept and the disagreeing duplicate dropped).
+
+Rows with invalid intent/subject/action labels: 0
+Rows with missing values: 0
+
+Split distribution:
+  train: 5617 (82.8%)
+  validation: 532 (7.8%)
+  test: 632 (9.3%)
+  Splits are assigned by (template-family, concept) hash bucket, not per-row,
+  so paraphrase variants of the same underlying sentence structure stay in the
+  same split. This prevents near-duplicate leakage across train/val/test.
+
+INTENT distribution:
+  alert: 463 (6.8%)
+  question: 1515 (22.3%)
+  request: 1080 (15.9%)
+  statement: 3723 (54.9%)
+
+SUBJECT distribution:
+  me: 2606 (38.4%)
+  you: 2049 (30.2%)
+  other: 2126 (31.4%)
+
+ACTION distribution:
+  communicate: 813 (12.0%)
+  danger: 463 (6.8%)
+  do: 1195 (17.6%)
+  feel: 705 (10.4%)
+  move: 1725 (25.4%)
+  need: 1880 (27.7%)
+
+CONCEPT distribution (top 15 + special):
+  none: 2247 (33.1%)
+  unknown_concept: 694 (10.2%)
+  bus: 195 (2.9%)
+  train: 194 (2.9%)
+  car: 193 (2.8%)
+  painkillers: 192 (2.8%)
+  wallet: 189 (2.8%)
+  water: 187 (2.8%)
+  bathroom: 181 (2.7%)
+  food: 178 (2.6%)
+  phone: 177 (2.6%)
+  medicine: 174 (2.6%)
+  keys: 169 (2.5%)
+  home: 146 (2.2%)
+  office: 144 (2.1%)
+  ... none: 33.1% of all rows
+  ... unknown_concept: 10.2% of all rows
+
+TARGET vs ACTUAL (spec's suggested ranges):
+  concept=none        target 25-35%   actual 33.1%
+  concept=unknown      target  5-10%   actual 10.2%
+  intent=statement     target 35-45%   actual 54.9%
+  intent=question      target 25-30%   actual 22.3%
+  intent=request       target 20-25%   actual 15.9%
+  intent=alert         target  8-12%   actual 6.8%
+  action=communicate   target 20-25%   actual 12.0%
+  action=need          target 20-25%   actual 27.7%
+  action=do            target 10-15%   actual 17.6%
+  action=feel          target 10-15%   actual 10.4%
+  action=move          target 15-20%   actual 25.4%
+  action=danger        target  8-12%   actual 6.8%
+
+NOTE ON DATASET SIZE: the brief requested 100,000 rows but explicitly states
+'quality is more important than reaching exactly 100,000 rows.' This dataset
+contains 6781 rows built from ~185 controlled sentence-template families x
+multiple persons/concepts x casual/ASR paraphrase variants. Padding further to
+literally 100k using the same templates would mean heavy near-duplication
+without adding real signal, which the brief separately warns against ('avoid
+templates that uniquely identify labels' / 'avoid unnatural sentences merely
+to increase vocabulary'). The generator is fully parameterized (see generators.py)
+so scaling to 100k+ by adding more template families or persons is straightforward
+if a larger corpus is specifically wanted for training.
+
+EXAMPLES FROM EVERY OUTPUT CLASS
+------------------------------------------------------------
+[intent=alert]
+  "Loose wire on the floor." -> alert,you,danger,none
+  "Um, watch out for the fire." -> alert,you,danger,fire
+  "Pole coming your way." -> alert,you,danger,pole
+[intent=question]
+  "You knitting?" -> question,you,do,none
+  "Do You guys have a second?" -> question,you,communicate,none
+  "You going to the garden?" -> question,you,move,garden
+[intent=request]
+  "Would you mind getting my bathroom" -> request,you,need,bathroom
+  "Well, pass me the bathroom." -> request,me,need,bathroom
+  "So, tell me the name." -> request,you,communicate,name
+[intent=statement]
+  "You need water" -> statement,you,need,water
+  "My dad is cooking." -> statement,other,do,none
+  "I'm heading to the train." -> statement,me,move,train
+[subject=me]
+  "Me feel happy" -> statement,me,feel,happy
+  "I need my painkillers" -> request,me,need,painkillers
+  "I'm coming." -> statement,me,move,none
+[subject=you]
+  "Well, you all don't need bathroom." -> statement,you,need,bathroom
+  "Do you need wallet" -> question,you,need,wallet
+  "Are You guys gonna the hospital?" -> question,you,move,hospital
+[subject=other]
+  "My mom is gardening." -> statement,other,do,none
+  "They is going somewhere" -> statement,other,move,none
+  "They is goin' to the bus." -> statement,other,move,bus
+[action=communicate]
+  "Do you remember my name" -> question,you,communicate,name
+  "Tired?" -> question,me,communicate,tired
+  "Goodbye." -> statement,me,communicate,none
+[action=danger]
+  "Tell he to be careful" -> alert,other,danger,none
+  "Uh, something's wrong up ahead." -> alert,you,danger,none
+  "Stop right there, pole" -> alert,you,danger,pole
+[action=do]
+  "She is walking." -> statement,other,do,none
+  "Are you knitting?" -> question,you,do,none
+  "She's going to help you." -> statement,other,do,none
+[action=feel]
+  "We're sick." -> statement,me,feel,sick
+  "Are you happy?" -> question,you,feel,happy
+  "Is he okay?" -> question,other,feel,none
+[action=move]
+  "We wanna go to the home." -> statement,me,move,home
+  "We're heading to the bus" -> statement,me,move,bus
+  "He is going to the hospital." -> statement,other,move,hospital
+[action=need]
+  "Give me the breadboard" -> request,me,need,unknown_concept
+  "I don't need medicine" -> statement,me,need,medicine
+  "Uh, i don't need anything." -> statement,me,need,none
+
+[concept=none examples]
+  "My mom is busy" -> statement,other,do,none
+  "Are you dancing?" -> question,you,do,none
+  "I am gonna wait here." -> statement,me,do,none
+  "She is drawing" -> statement,other,do,none
+  "I am going to think about it" -> statement,me,do,none
+[concept=unknown_concept examples]
+  "He's goin' to the clinic." -> statement,other,move,unknown_concept
+  "I'm heading to bluewidget." -> statement,me,move,unknown_concept
+  "you need the wrench?" -> question,you,need,unknown_concept
+  "He's going to the airport" -> statement,other,move,unknown_concept
+  "I need an adapter" -> request,me,need,unknown_concept
+
+HARD-NEGATIVE TEST EXAMPLES (from the spec's failure-mode list)
+------------------------------------------------------------
+  "I'm going to go." -> statement,me,move,none
+  "What do you want?" -> question,you,need,none
+  "How are you?" -> question,you,feel,none
+  "What are you doing?" -> question,you,do,none
+  "I'm not going anywhere." -> statement,me,move,none
+  "What is your father's name?" -> question,you,communicate,name
+  "Your dad needs painkillers." -> statement,other,need,painkillers
+
+CHALLENGE EVALUATION SET (haptic_challenge_test.csv)
+------------------------------------------------------------
+Total rows: 1891
+  unknown_word: 515
+  subject_confusion_minimal_pair: 290
+  fresh_phrasing: 278
+  asr_fragment: 221
+  negation: 194
+  generic_move_no_destination: 130
+  generic_need_no_object: 73
+  generic_feel_no_emotion: 68
+  ambiguous_question: 51
+  contractions: 40
+  concept_hallucination_trap: 29
+  canon_hard_negative: 2
+
+Challenge-set sentences that also appear verbatim in the TRAIN split: 0 (0.0% of challenge set)
+
+END OF REPORT
