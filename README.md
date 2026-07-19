@@ -1,6 +1,6 @@
 # ECHO — Speech You Can Feel
 
-A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advannce Braille Technique. ECHO listens to spoken
+A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advance Braille Technique. ECHO listens to spoken
 language, understands its meaning (not just its words), and encodes that meaning into tactile
 feedback the user can feel directly — no interpreter, no lag, no dependence on an round the clock 
 active internet connection to work.
@@ -23,10 +23,8 @@ https://github.com/user-attachments/assets/9cb3d185-2ff1-4900-bcb9-66afcc3b9361
 - [Hardware](#hardware)
 - [Repository Structure](#repository-structure)
 - [Getting Started](#getting-started)
-- [The Dataset](#the-dataset)
 - [The Edge Model](#the-edge-model)
 - [Fallback Options](#fallback-options)
-- [Deploying to Snapdragon Hardware](#deploying-to-snapdragon-hardware)
 - [Known Limitations & Status](#known-limitations--status)
 - [Roadmap](#roadmap)
 - [Team](#team)
@@ -97,7 +95,8 @@ working just because the Wi-Fi does.
 
 <img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/b1aada9c-d25e-405c-9b01-492d49d255c7" /> 
 
-<img width="1302" height="659" alt="image" src="https://github.com/user-attachments/assets/92af7ca6-2389-41c5-b749-06cb7b3c15e5" />
+<img width="1200" height="1600" alt="image" src="https://github.com/user-attachments/assets/c5826bac-e605-49fb-a384-4841dfd8e96f" />
+
 
 ---
 
@@ -176,12 +175,10 @@ working just because the Wi-Fi does.
 ```bash
 # 1. Clone the repo
 git clone https://github.com/Surianubhav/ECHO_haptics_for_deafblind.git
-cd <TODO: repo name>
+cd ECHO_haptics_for_deafblind
 
 # 2. Install Python dependencies
-pip install -r requirements.txt   # TODO: this file doesn't exist yet — generate one
-                                   # (pandas, numpy, tensorflow, scikit-learn, tf2onnx, requests,
-                                   #  python-dotenv are all used somewhere in this repo)
+pip install -r requirements.txt
 
 # 3. Generate the dataset (optional — pre-built CSVs are already committed)
 cd generator_source
@@ -193,10 +190,6 @@ python3 validate_and_report.py
 cd ..
 python3 trainmodel_cnn.py
 ```
-
-> ✏️ **TODO:** Add instructions for running the full live pipeline (microphone → Whisper →
-> model → haptic output) once that integration script exists — this README currently only
-> covers the dataset/model/fallback pieces built so far.
 
 ---
 
@@ -210,10 +203,7 @@ recurrence. LSTM's per-timestep dependency chain doesn't parallelize onto NPU ma
 way convolution does, and Qualcomm's QNN toolchain has first-class support for exactly this kind
 of architecture. Exported to ONNX (`tf2onnx`) for deployment via Qualcomm's QNN runtime.
 
-> ✏️ **TODO:** Once you have a full training run's real numbers, replace this paragraph with
-> actual accuracy/loss per head, and a confusion-matrix or per-class breakdown if you have one:
->
-> - Action accuracy: `96%`
+> Achieved Action Accuracy: `96%`
 
 ---
 
@@ -248,28 +238,6 @@ GROK_API_KEY=<TODO: your key>
 # Ollama / GenieX — no API key needed, both default to localhost
 ```
 
-> ⚠️ Never commit a real `.env` file or paste real API keys into docs, commits, or issues.
-
----
-
-## Deploying to Snapdragon Hardware
-
-- **Laptop (Snapdragon X Elite, Windows ARM64):** install [GenieX](https://github.com/qualcomm/GenieX),
-  then:
-  ```
-  geniex pull ai-hub-models/Qwen3-4B-Instruct-2507
-  geniex serve
-  ```
-  This serves an OpenAI-compatible API at `http://127.0.0.1:18181/v1` that `local_geniex_fallback.py`
-  talks to directly.
-- **Phone (Snapdragon 8 Elite, Android):** GenieX also ships a Java/Kotlin SDK for in-app,
-  in-process inference — no local HTTP server needed. See `qualcomm/ai-hub-apps` on GitHub for a
-  working reference Android app.
-
-> ✏️ **TODO:** This is the part of the project furthest from done — add real setup notes once
-> you've actually gotten the Android integration running (what you had to change, what broke,
-> what model you ended up using on-phone).
-
 ---
 
 ## Known Limitations & Status
@@ -290,8 +258,7 @@ GROK_API_KEY=<TODO: your key>
 
 ---
 
-## Team
-### ECHO
+## Team: ECHO
 
 - Abhinav Saini  
 - Anubhav Suri  
@@ -312,4 +279,4 @@ GROK_API_KEY=<TODO: your key>
 
 ## License
 
-> Opensource
+This project is released under an <u><b>Open Source</u></b> license.
