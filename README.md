@@ -27,6 +27,7 @@ https://github.com/user-attachments/assets/9cb3d185-2ff1-4900-bcb9-66afcc3b9361
 - [Fallback Options](#fallback-options)
 - [Known Limitations & Status](#known-limitations--status)
 - [Roadmap](#roadmap)
+- [Future Upgrades](#future-updates)
 - [Team](#team)
 - [Acknowledgments](#acknowledgments)
 - [License](#license)
@@ -172,6 +173,8 @@ working just because the Wi-Fi does.
 
 ## Getting Started
 
+> Requires Python v3.11+, Arduino App Lab
+  
 ```bash
 # 1. Clone the repo
 git clone https://github.com/Surianubhav/ECHO_haptics_for_deafblind.git
@@ -189,6 +192,9 @@ python3 validate_and_report.py
 # 4. Train the edge model
 cd ..
 python3 trainmodel_cnn.py
+
+# Arduino Uno Q setup
+Run Applab and run cd arduino-q/
 ```
 
 ---
@@ -255,6 +261,12 @@ GROK_API_KEY=<TODO: your key>
 - [ ] Expand the fixed concept vocabulary based on real usage
 - [ ] Tune confidence thresholds against real usage data
 - [ ] Finalize haptic hardware and development
+
+---
+
+## Future
+
+- Integration with web applications to enable Video Transcription via Haptics and Visual 
 
 ---
 
