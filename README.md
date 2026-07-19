@@ -1,6 +1,6 @@
 # ECHO — Speech You Can Feel
 
-A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advance Braille Technique. ECHO listens to spoken
+A real-time speech-to-haptic communication system for Deaf-Blind users utilizing the Advanced Braille Technique. ECHO listens to spoken
 language, understands its meaning (not just its words), and encodes that meaning into tactile
 feedback the user can feel directly — no interpreter, no lag, no dependence on an round the clock 
 active internet connection to work.
@@ -266,7 +266,7 @@ GROK_API_KEY=<TODO: your key>
 
 ## Future
 
-- Integration with web applications to enable Video Transcription via Haptics and Visual 
+- Integration with web applications to enable Video Transcription via Haptics and Visuals.
 
 ---
 
