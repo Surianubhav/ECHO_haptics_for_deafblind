@@ -1,12 +1,18 @@
 # ECHO — Speech You Can Feel
 
-A real-time speech-to-haptic communication system for Deaf-Blind users. ECHO listens to spoken
+A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advannce Brille Technique. ECHO listens to spoken
 language, understands its meaning (not just its words), and encodes that meaning into tactile
 feedback the user can feel directly — no interpreter, no lag, no dependence on an round the clock 
 active internet connection to work.
 
-> ✏️ **TODO:** Add a one-line project tagline/hook here if you want something punchier than the
-> title alone, and a link to your demo video once you have one.
+---
+## Vide Demo
+
+> For Visual Demonstrations and Proof of Concept  
+> (Since actual Motor Vibrations can't be demonstrated Videographically)
+
+
+https://github.com/user-attachments/assets/9cb3d185-2ff1-4900-bcb9-66afcc3b9361
 
 ---
 
@@ -14,6 +20,7 @@ active internet connection to work.
 
 - [Overview](#overview)
 - [How It Works](#how-it-works)
+- [Hardware](#hardware)
 - [Repository Structure](#repository-structure)
 - [Getting Started](#getting-started)
 - [The Dataset](#the-dataset)
@@ -33,7 +40,15 @@ active internet connection to work.
 Pipeline:
 
 ```
-Microphone → Whisper (speech-to-text) → text normalization → multi-head classifier → haptic encoding
+Microphone → Whisper (speech-to-text) → text normalization → Edge Sentence classifier → Edge AI is confident about its inference -> haptic encoding
+                                                                      ↓
+                                                      Edge AI is unsure of its inference
+                                                                      ↓
+                                             AI sends collected data for cloud Inference by Llama AI Instance
+                                                                      ↓
+                                                Arduino Uno Q Edge Device receives Inference results
+                                                                      ↓
+                                                               haptic encoding
 ```
 
 The classifier splits every sentence into four independent signals a haptic device can act on:
@@ -50,9 +65,11 @@ Example: `"Turn left."` → `request | you | move | left`
 When the edge model isn't confident, the system escalates through a cascade rather than guessing:
 
 ```
-Edge CNN (instant, on-device)
-   → On-device LLM via GenieX + Hexagon NPU (still fully offline)
-      → Cloud LLM (rare, last resort — only if the first two both fail)
+               Edge CNN (instant, on-device)
+                            ↓
+ On-device LLM via GenieX + Hexagon NPU (still fully offline)
+                            ↓
+Cloud LLM (rare, last resort — only if the first two both fail)
 ```
 
 This matters specifically because it's an assistive device: a confident wrong answer is worse
@@ -72,43 +89,85 @@ working just because the Wi-Fi does.
    below a threshold, the sentence is escalated.
 5. **Escalation cascade** — first to an on-device LLM (GenieX, running on the Hexagon NPU, still
    fully offline), and only as a last resort to a cloud LLM.
-6. **Haptic encoding** — the final four-field output is mapped to a tactile 3×2 matrix pattern.
+6. **Haptic encoding** — the final four-field output is mapped to a tactile 3×2 matrix pattern and 3 quick inference tactile.
 
-> ✏️ **TODO:** This last step (haptic encoding → physical output) isn't documented yet in this
-> README — add a section here once the haptic hardware/encoding scheme is finalized (what pattern
-> maps to what signal, what hardware you're driving, wiring diagram if relevant).
+---
+
+## Hardware
+
+<img width="1600" height="1200" alt="image" src="https://github.com/user-attachments/assets/b1aada9c-d25e-405c-9b01-492d49d255c7" /> 
+
+<img width="1302" height="659" alt="image" src="https://github.com/user-attachments/assets/92af7ca6-2389-41c5-b749-06cb7b3c15e5" />
 
 ---
 
 ## Repository Structure
 
-> ✏️ **TODO:** This layout reflects what's been built so far — reorganize into your actual repo
-> folders (e.g. `dataset/`, `model/`, `fallback/`, `docs/`) and update paths below to match.
-
 ```
 .
-├── generator_source/
-│   ├── lexicon.py              # vocab, grammar helpers, casual/ASR paraphrase generation
-│   ├── generators.py           # per-action sentence template generators
-│   ├── main.py                 # runs generators → dedupes → splits → writes main CSV
-│   ├── challenge_gen.py        # builds the adversarial evaluation set
-│   └── validate_and_report.py  # QC checks + dataset_report.txt
-├── haptic_dataset_v4_100k.csv  # main train/validation/test set (see note below on filename)
-├── haptic_challenge_test.csv   # adversarial "challenge" evaluation set
-├── dataset_report.txt          # full distribution/QC report for the above
-├── trainmodel_cnn.py           # multi-head Text-CNN training + ONNX export
-├── cloud_fallback.py           # cloud fallback client (Qualcomm Cloud AI 100 / Cirrascale)
-├── cloud_fallback_grok.py      # cloud fallback client (xAI Grok, alternative provider)
-├── local_ollama_fallback.py    # local LLM fallback via Ollama (CPU-only on ARM64)
-├── local_geniex_fallback.py    # local LLM fallback via GenieX (NPU-accelerated)
-└── ECHO_Hackathon_Deck.pptx    # presentation deck
+├── arduino-q/                          # Arduino micro-controller integration
+│   ├── python/
+│   │   └── main.py
+│   ├── sketch/
+│   │   └── app.yaml
+│   ├── .gitignore
+│   └── README.md
+│
+├── simple-whisper-transcription/       # Audio capture & voice processing pipeline
+│   ├── reference/
+│   │   └── WhisperApp.py
+│   ├── src/
+│   │   ├── LiveTranscriber.py
+│   │   ├── LiveTranscriber_standalone.py
+│   │   ├── haptic_inference.py         # Formulates inference from text to haptic commands
+│   │   ├── model.py
+│   │   ├── requirements.txt
+│   │   ├── standalone_model.py
+│   │   ├── standalone_whisper.py
+│   │   ├── test_mic.py
+│   │   └── wifi_sender.py
+│   ├── .gitignore
+│   ├── BUILD_EXECUTABLE.md
+│   ├── CODE_OF_CONDUCT.md
+│   ├── CONTRIBUTING.md
+│   ├── LICENSE
+│   ├── README.md
+│   ├── WhisperTranscriber.spec
+│   ├── build-requirements.txt
+│   ├── build.bat
+│   ├── build.ps1
+│   ├── build_executable.py
+│   ├── diagnose_executable.bat
+│   ├── extract_mel_filters.py
+│   ├── mel_filters.npz
+│   └── requirements.txt
+│
+├── generator_source/                   # Data Synthesizer (To Be Built / Moved)
+│   ├── lexicon.py                      # Vocab, ASR paraphrase helpers
+│   ├── generators.py                   # Per-action templates
+│   ├── main.py                         # Compiles, dedupes, splits data
+│   ├── challenge_gen.py                # Builds adversarial evaluation set
+│   └── validate_and_report.py          # QC validation scripts
+│
+├── tests/                              # Unit & integration testing suite
+│
+├── .gitignore
+├── README.md
+│
+# --- ML Models & Datasets ---
+├── haptic_dataset_v4_100knew.csv      # Main dataset (active version from your explorer)
+├── haptic_challenge_test.csv           # Adversarial evaluation dataset
+├── dataset_report.txt                  # QC distribution metrics
+├── haptic_model_cnn.onnx               # Compiled deployment model
+├── trainmodel_cnn.py                   # Model training script
+├── pipeline.py                         # End-to-end local routing system
+│
+# --- Fallback Clients & LLM Routers ---
+├── cloud_fallback.py                   # Qualcomm Cloud AI 100 / Cirrascale router
+├── cloud_fallback_grok.py              # Alternative xAI Grok provider
+├── local_llm_fallback.py               # CPU-based fallback (via Ollama on ARM64)
+└── localgeniefallback.py               # NPU-accelerated fallback (via GenieX)
 ```
-
-> ⚠️ **Naming note:** `haptic_dataset_v4_100k.csv` currently contains **~6,080 rows**, not
-> 100k — the "100k" in the filename is a holdover from the original spec target and no longer
-> matches reality (dataset size was deliberately kept smaller for quality; see `dataset_report.txt`
-> for the reasoning). Consider renaming the file before submitting/publishing so it doesn't
-> mislead anyone skimming the repo.
 
 ---
 
@@ -246,56 +305,42 @@ GROK_API_KEY=<TODO: your key>
 
 ## Known Limitations & Status
 
-Being upfront about what's solid vs. still rough, for judges and for future-you:
-
-- **GenieX is developer preview** — expect rough edges; verify exact model slugs against the
-  live [AI Hub catalog](https://aihub.qualcomm.com/models) since names can shift.
-- **Edge model accuracy numbers are not yet finalized** — see the TODO in
-  [The Edge Model](#the-edge-model).
-- **Android/phone integration is not yet built** — current work covers dataset, edge model, and
-  four fallback options; the mobile app itself is not in this repo yet.
-- **`onnxruntime-qnn` vs. generic `onnxruntime`** — confirm the QNN execution provider is actually
-  being picked up at inference time (`providers=["QNNExecutionProvider"]`), not silently falling
-  back to CPU. This was an open issue during development.
-
-> ✏️ **TODO:** Add/remove items here as things get resolved or as new rough edges show up —
-> keep this section honest, it's more useful to reviewers than a README that claims everything works.
+- Unavailability of Real User dataset to train on device AI for personalisation.
+- Availability of Internet Connectivity for fallback Support.
+- Android/phone integration is not yet implemented.
 
 ---
 
 ## Roadmap
 
-- [ ] Port edge model + GenieX fallback to Android (Snapdragon 8 Elite SDK)
+- [ ] Develop Edge Model + Llama Fallback (Cloud)
+- [ ] Develop Low Latency Framework
 - [ ] Expand the fixed concept vocabulary based on real usage
-- [ ] Pilot testing with DeafBlind community members
-- [ ] Tune confidence thresholds against real (not just synthetic) usage data
-- [ ] Finalize haptic hardware encoding scheme
-
-> ✏️ **TODO:** Reorder/edit this list to match your actual post-hackathon plans, and check off
-> anything you finish before submission.
+- [ ] Tune confidence thresholds against real usage data
+- [ ] Finalize haptic hardware and development
 
 ---
 
 ## Team
 ### ECHO
 
-> - Abhinav Saini
-> - Anubhav Suri
-> - Arsh Handa
-> - Yash Pratap Singh
+- Abhinav Saini  
+- Anubhav Suri  
+- Arsh Handa  
+- Yash Pratap Singh  
 
 ---
 
 ## Acknowledgments
 
-> Qualcomm Multiverse Hackathon Organisation Team
-> Whister + AI Hub
-> Arduino Uno Q References and Docs
-> Llama LLM
-> Thanks to Qualcomm for Snapdragon X Elite Laptop.
++ Qualcomm Multiverse Hackathon Organisation Team  
++ Whister + AI Hub  
++ Arduino Uno Q References and Docs  
++ Llama LLM  
++ Thanks to Qualcomm for Snapdragon X Elite Laptop.  
 
 ---
 
 ## License
 
-> Apache 2.0 License
+> Opensource
