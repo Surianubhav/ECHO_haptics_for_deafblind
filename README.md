@@ -1,9 +1,9 @@
 # ECHO — Speech You Can Feel
 
-A real-time speech-to-haptic communication system for DeafBlind users. ECHO listens to spoken
+A real-time speech-to-haptic communication system for Deaf-Blind users. ECHO listens to spoken
 language, understands its meaning (not just its words), and encodes that meaning into tactile
-feedback the user can feel directly — no interpreter, no lag, no dependence on an internet
-connection to work.
+feedback the user can feel directly — no interpreter, no lag, no dependence on an round the clock 
+active internet connection to work.
 
 > ✏️ **TODO:** Add a one-line project tagline/hook here if you want something punchier than the
 > title alone, and a link to your demo video once you have one.
@@ -277,26 +277,25 @@ Being upfront about what's solid vs. still rough, for judges and for future-you:
 ---
 
 ## Team
+### ECHO
 
-> ✏️ **TODO:** Add team member names, roles, and contact info here.
->
-> - `[Name]` — `[role, e.g. "model + dataset"]` — `[contact/GitHub]`
-> - `[Name]` — `[role, e.g. "hardware + haptic encoding"]` — `[contact/GitHub]`
-> - `[Name]` — `[role]` — `[contact/GitHub]`
+> - Abhinav Saini
+> - Anubhav Suri
+> - Arsh Handa
+> - Yash Pratap Singh
 
 ---
 
 ## Acknowledgments
 
-> ✏️ **TODO:** Credit the hackathon, Qualcomm/Snapdragon program contacts, and any mentors or
-> resources that helped along the way. Example:
->
-> Built at `[Hackathon Name]`, `[Date]`. Thanks to `[organizers/mentors]` and Qualcomm for
-> Snapdragon hardware access and Cloud AI 100 credits.
+> Qualcomm Multiverse Hackathon Organisation Team
+> Whister + AI Hub
+> Arduino Uno Q References and Docs
+> Llama LLM
+> Thanks to Qualcomm for Snapdragon X Elite Laptop.
 
 ---
 
 ## License
 
-> ✏️ **TODO:** Pick a license (MIT is a common default for hackathon projects if you want it
-> freely reusable) and add the corresponding `LICENSE` file to the repo root.
+> Apache 2.0 License
