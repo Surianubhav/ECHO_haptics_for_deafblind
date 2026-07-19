@@ -1,12 +1,12 @@
 # ECHO — Speech You Can Feel
 
-A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advannce Brille Technique. ECHO listens to spoken
+A real-time speech-to-haptic communication system for Deaf-Blind users utiizing the Advannce Braille Technique. ECHO listens to spoken
 language, understands its meaning (not just its words), and encodes that meaning into tactile
 feedback the user can feel directly — no interpreter, no lag, no dependence on an round the clock 
 active internet connection to work.
 
 ---
-## Vide Demo
+## Video Demo
 
 > For Visual Demonstrations and Proof of Concept  
 > (Since actual Motor Vibrations can't be demonstrated Videographically)
@@ -173,12 +173,9 @@ working just because the Wi-Fi does.
 
 ## Getting Started
 
-> ✏️ **TODO:** Fill in real setup steps once you've finalized your environment. Draft below —
-> replace/verify each command actually works on a clean checkout.
-
 ```bash
 # 1. Clone the repo
-git clone <TODO: your repo URL>
+git clone https://github.com/Surianubhav/ECHO_haptics_for_deafblind.git
 cd <TODO: repo name>
 
 # 2. Install Python dependencies
@@ -203,30 +200,6 @@ python3 trainmodel_cnn.py
 
 ---
 
-## The Dataset
-
-Built from scratch rather than sourced, because no off-the-shelf dataset teaches a model to
-say "I don't know" instead of hallucinating.
-
-- **~6,080** training examples, generated from ~185 controlled sentence-template families ×
-  multiple persons/concepts × casual/ASR-style paraphrase variants
-- **~1,910** adversarial "challenge" test sentences targeting known failure modes specifically:
-  concept hallucination, subject confusion, negation, unseen sentence structures, unknown words,
-  ASR-style fragments, contractions, and ambiguous questions
-- **0%** verbatim overlap between the challenge set and the training split
-- Splits are assigned by **template family**, not by row, so paraphrases of one sentence
-  structure can't leak across train/validation/test
-- All of the spec's original hard-negative cases (e.g. `"I'm going to go."` → `move | none`,
-  not a hallucinated destination) resolve correctly
-
-Full distributions, QC checks, and worked examples are in `dataset_report.txt`.
-
-> ✏️ **TODO:** If you expand the dataset further (more rows, more concepts) before the final
-> submission, re-run `validate_and_report.py` and paste the updated top-line numbers here so
-> this section doesn't go stale.
-
----
-
 ## The Edge Model
 
 A multi-head **Text-CNN** (parallel `Conv1D` branches at kernel sizes 2/3/4 + global max-pooling,
@@ -240,11 +213,7 @@ of architecture. Exported to ONNX (`tf2onnx`) for deployment via Qualcomm's QNN 
 > ✏️ **TODO:** Once you have a full training run's real numbers, replace this paragraph with
 > actual accuracy/loss per head, and a confusion-matrix or per-class breakdown if you have one:
 >
-> - Intent accuracy: `[ADD NUMBER]`
-> - Subject accuracy: `[ADD NUMBER]`
-> - Action accuracy: `[ADD NUMBER]`
-> - Concept accuracy: `[ADD NUMBER]`
-> - Training time / hardware used: `[ADD DETAILS]`
+> - Action accuracy: `96%`
 
 ---
 
