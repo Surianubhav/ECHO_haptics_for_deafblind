@@ -1,0 +1,38 @@
+# Core numerical / data
+numpy==1.26.4
+pandas==2.2.3
+scipy==1.15.2
+scikit-learn==1.9.0
+
+# Haptic CNN model
+tensorflow==2.21.0
+tf2onnx==1.17.0
+onnx==1.16.2
+
+# ONNX inference
+onnxruntime==1.21.0
+
+# Audio / Whisper
+audio2numpy==0.1.2
+sounddevice==0.5.1
+samplerate==0.2.1
+openai-whisper==20231117
+tiktoken==0.9.0
+
+# PyTorch required by Whisper / Qualcomm model code
+torch==2.4.1
+torchvision==0.19.1
+
+# Qualcomm AI Hub
+qai-hub==0.26.0
+qai-hub-models==0.25.5
+onnxruntime-qnn==2.3.0
+
+# Configuration / networking
+PyYAML==6.0.2
+requests==2.32.3
+
+# Other runtime dependencies
+protobuf==3.20.3
+tqdm==4.67.1
+regex==2024.11.6

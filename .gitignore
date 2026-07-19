@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environments
+echo_env/
+venv/
+.venv/
+
+# Training artifacts
+*.keras
+*.h5
+
+# Large datasets
+*.csv
+
+# Secrets
+.env
+*.key
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Temporary
+*.log
